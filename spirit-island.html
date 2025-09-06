@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spirit Island Score Calculator</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="common.js"></script>
+    <script src="game-utils.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+                url('images/spirit-island-bg.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <a href="index.html" class="flex items-center text-gray-900 hover:text-blue-600 transition-colors">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span class="font-semibold text-lg">Game Scoring</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Navigation -->
+        <div class="mb-8">
+            <a href="index.html" class="inline-flex items-center text-white hover:text-gray-300 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Games
+            </a>
+        </div>
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">🌿 Spirit Island</h1>
+        </div>
+
+        <!-- Game Setup -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Game Setup</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Number of Players:</label>
+                    <select id="playerCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onchange="updatePlayerCount()">
+                        <option value="1" selected>1 Player</option>
+                        <option value="2">2 Players</option>
+                        <option value="3">3 Players</option>
+                        <option value="4">4 Players</option>
+                        <option value="5">5 Players</option>
+                        <option value="6">6 Players</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Game Result:</label>
+                    <select id="gameResult" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onchange="calculateScores()">
+                        <option value="victory">Victory</option>
+                        <option value="defeat">Defeat</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty Level:</label>
+                    <input type="number" id="difficulty" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" min="0" max="15" value="0" onchange="calculateScores()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Players Container -->
+        <div id="playersContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"></div>
+
+        <!-- Results -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Results</h2>
+            <div id="gameOutcome" class="text-2xl font-bold text-center py-4 text-gray-700">Enter scores to see results</div>
+            <div id="finalScores" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+        let playerCount = 1;
+        const gameUtils = new GameUtils('Spirit Island', '#16a34a');
+
+        function updatePlayerCount() {
+            playerCount = parseInt(document.getElementById('playerCount').value);
+            generatePlayers();
+            calculateScores();
+        }
+
+        function generatePlayers() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= playerCount; i++) {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'bg-white rounded-xl shadow-lg p-6';
+                playerCard.innerHTML = `
+                    <div class="flex items-center mb-6 pb-4 border-b border-gray-200">
+                        <div class="bg-green-100 text-green-800 rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm mr-3">
+                            ${i}
+                        </div>
+                        <div id="p${i}_nameContainer"></div>
+                    </div>
+
+                    <!-- Spirit Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Spirit</label>
+                        <select id="p${i}_spirit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onchange="calculateScores()">
+                            <optgroup label="Low Complexity">
+                                <option value="Devouring Teeth Lurk Underfoot">Devouring Teeth Lurk Underfoot</option>
+                                <option value="Eyes Watch from the Trees">Eyes Watch from the Trees</option>
+                                <option value="Fathomless Mud of the Swamp">Fathomless Mud of the Swamp</option>
+                                <option value="Lightning's Swift Strike">Lightning's Swift Strike</option>
+                                <option value="Rising Heat of Stone and Sand">Rising Heat of Stone and Sand</option>
+                                <option value="River Surges in Sunlight">River Surges in Sunlight</option>
+                                <option value="Shadows Flicker Like Flame">Shadows Flicker Like Flame</option>
+                                <option value="Sun-Bright Whirlwind">Sun-Bright Whirlwind</option>
+                                <option value="Vital Strength of the Earth">Vital Strength of the Earth</option>
+                            </optgroup>
+                            <optgroup label="Moderate Complexity">
+                                <option value="A Spread of Rampant Green">A Spread of Rampant Green</option>
+                                <option value="Ember-Eyed Behemoth">Ember-Eyed Behemoth</option>
+                                <option value="Grinning Trickster Stirs Up Trouble">Grinning Trickster Stirs Up Trouble</option>
+                                <option value="Hearth-Vigil">Hearth-Vigil</option>
+                                <option value="Keeper of the Forbidden Wilds">Keeper of the Forbidden Wilds</option>
+                                <option value="Lure of the Deep Wilderness">Lure of the Deep Wilderness</option>
+                                <option value="Many Minds Move as One">Many Minds Move as One</option>
+                                <option value="Sharp Fangs Behind the Leaves">Sharp Fangs Behind the Leaves</option>
+                                <option value="Shifting Memory of Ages">Shifting Memory of Ages</option>
+                                <option value="Stone's Unyielding Defiance">Stone's Unyielding Defiance</option>
+                                <option value="Thunderspeaker">Thunderspeaker</option>
+                                <option value="Towering Roots of the Jungle">Towering Roots of the Jungle</option>
+                                <option value="Volcano Looming High">Volcano Looming High</option>
+                            </optgroup>
+                            <optgroup label="High Complexity">
+                                <option value="Breath of Darkness Down Your Spine">Breath of Darkness Down Your Spine</option>
+                                <option value="Bringer of Dreams and Nightmares">Bringer of Dreams and Nightmares</option>
+                                <option value="Downpour Drenches the World">Downpour Drenches the World</option>
+                                <option value="Heart of the Wildfire">Heart of the Wildfire</option>
+                                <option value="Ocean's Hungry Grasp">Ocean's Hungry Grasp</option>
+                                <option value="Relentless Gaze of the Sun">Relentless Gaze of the Sun</option>
+                                <option value="Serpent Slumbering Beneath the Island">Serpent Slumbering Beneath the Island</option>
+                                <option value="Shroud of Silent Mist">Shroud of Silent Mist</option>
+                                <option value="Vengeance as a Burning Plague">Vengeance as a Burning Plague</option>
+                                <option value="Wandering Voice Keens Delirium">Wandering Voice Keens Delirium</option>
+                                <option value="Wounded Waters Bleeding">Wounded Waters Bleeding</option>
+                            </optgroup>
+                            <optgroup label="Very High Complexity">
+                                <option value="Dances Up Earthquakes">Dances Up Earthquakes</option>
+                                <option value="Finder of Paths Unseen">Finder of Paths Unseen</option>
+                                <option value="Fractured Days Split the Sky">Fractured Days Split the Sky</option>
+                                <option value="Starlight Seeks Its Form">Starlight Seeks Its Form</option>
+                            </optgroup>
+                            <optgroup label="Custom">
+                                <option value="Custom Spirit">Custom Spirit</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Game Data -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Presence on Board:</label>
+                            <input type="number" id="p${i}_presence" min="0" max="20" value="8"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   onchange="calculateScores()">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Dahan on Board:</label>
+                            <input type="number" id="p${i}_dahan" min="0" max="20" value="0"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   onchange="calculateScores()">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Fear Generated:</label>
+                            <input type="number" id="p${i}_fear" min="0" value="0"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   onchange="calculateScores()">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Blight on Island:</label>
+                            <input type="number" id="p${i}_blight" min="0" value="0"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                   onchange="calculateScores()">
+                        </div>
+                    </div>
+
+                    <!-- Thematic Boards Bonus -->
+                    <div class="mb-6 bg-green-50 rounded-lg p-3">
+                        <label class="flex items-center text-sm font-medium text-green-800">
+                            <input type="checkbox" id="p${i}_thematic" 
+                                   class="mr-2 rounded focus:ring-green-500 text-green-600" 
+                                   onchange="calculateScores()">
+                            Using Thematic Boards (+5 pts)
+                        </label>
+                        <p class="text-xs text-green-700 mt-1 ml-6">Extra points for playing on thematic island boards</p>
+                    </div>
+
+                    <!-- Score Display -->
+                    <div class="bg-gray-50 rounded-lg p-4 text-center">
+                        <div id="p${i}_total" class="text-2xl font-bold text-green-600 mb-2">0 points</div>
+                        <div id="p${i}_breakdown" class="text-sm text-gray-600">
+                            Enter values to calculate score
+                        </div>
+                    </div>
+                `;
+                container.appendChild(playerCard);
+                
+                // Add player name input after the card is added to DOM
+                const nameContainer = document.getElementById(`p${i}_nameContainer`);
+                nameContainer.innerHTML = gameUtils.createPlayerNameInput(i, '#16a34a');
+            }
+        }
+
+        function calculateScores() {
+            const gameResult = document.getElementById('gameResult').value;
+            const difficulty = parseInt(document.getElementById('difficulty').value) || 0;
+            const scores = [];
+            let totalScore = 0;
+
+            for (let i = 1; i <= playerCount; i++) {
+                const spirit = document.getElementById(`p${i}_spirit`).value;
+                const presence = parseInt(document.getElementById(`p${i}_presence`).value) || 0;
+                const dahan = parseInt(document.getElementById(`p${i}_dahan`).value) || 0;
+                const fear = parseInt(document.getElementById(`p${i}_fear`).value) || 0;
+                const blight = parseInt(document.getElementById(`p${i}_blight`).value) || 0;
+                const thematicBonus = document.getElementById(`p${i}_thematic`).checked ? 5 : 0;
+
+                let playerScore = 0;
+                
+                if (gameResult === 'victory') {
+                    playerScore += difficulty * 25;
+                    playerScore += presence * 2;
+                    playerScore += dahan * 3;
+                    playerScore += Math.floor(fear / 4) * 5;
+                    playerScore -= blight * 5;
+                    playerScore += thematicBonus;
+                } else {
+                    playerScore += Math.floor(difficulty * 10);
+                    playerScore += presence;
+                    playerScore += dahan;
+                    playerScore -= blight * 2;
+                    playerScore += thematicBonus;
+                }
+
+                scores.push({
+                    player: i,
+                    playerName: gameUtils.getPlayerName(i),
+                    spirit: spirit,
+                    score: playerScore,
+                    presence: presence,
+                    dahan: dahan,
+                    fear: fear,
+                    blight: blight
+                });
+
+                totalScore += playerScore;
+
+                document.getElementById(`p${i}_total`).textContent = `${playerScore} points`;
+                
+                let breakdown = [];
+                if (gameResult === 'victory') {
+                    breakdown.push(`Difficulty: +${difficulty * 25}`);
+                    breakdown.push(`Presence: +${presence * 2}`);
+                    breakdown.push(`Dahan: +${dahan * 3}`);
+                    breakdown.push(`Fear: +${Math.floor(fear / 4) * 5}`);
+                    breakdown.push(`Blight: -${blight * 5}`);
+                    if (thematicBonus > 0) breakdown.push(`Thematic: +${thematicBonus}`);
+                } else {
+                    breakdown.push(`Diff: +${Math.floor(difficulty * 10)}`);
+                    breakdown.push(`Presence: +${presence}`);
+                    breakdown.push(`Dahan: +${dahan}`);
+                    breakdown.push(`Blight: -${blight * 2}`);
+                    if (thematicBonus > 0) breakdown.push(`Thematic: +${thematicBonus}`);
+                }
+                
+                document.getElementById(`p${i}_breakdown`).textContent = breakdown.join(' | ');
+            }
+
+            displayResults(scores, totalScore, gameResult);
+            
+            // Add Save Game Session button if it doesn't exist
+            if (!document.getElementById('saveGameSessionContainer')) {
+                const resultsContainer = document.querySelector('.bg-white.rounded-xl.shadow-lg.p-6');
+                const saveContainer = document.createElement('div');
+                saveContainer.id = 'saveGameSessionContainer';
+                saveContainer.innerHTML = gameUtils.addSaveSessionButton('saveGameSessionContainer', scores, {
+                    gameResult: gameResult,
+                    difficulty: parseInt(document.getElementById('difficulty').value) || 0,
+                    totalScore: totalScore
+                });
+                resultsContainer.appendChild(saveContainer);
+            }
+        }
+
+        function displayResults(scores, totalScore, gameResult) {
+            const sortedScores = [...scores].sort((a, b) => b.score - a.score);
+            
+            let outcomeText = '';
+            let outcomeClass = '';
+            
+            if (gameResult === 'victory') {
+                outcomeText = `🎉 Victory! Total Score: ${totalScore}`;
+                outcomeClass = 'text-green-600';
+            } else {
+                outcomeText = `💀 Defeat. Total Score: ${totalScore}`;
+                outcomeClass = 'text-red-600';
+            }
+
+            document.getElementById('gameOutcome').innerHTML = `<span class="${outcomeClass}">${outcomeText}</span>`;
+            
+            const scoresHtml = sortedScores.map((score, index) => {
+                const playerDisplayName = score.playerName || `Player ${score.player}`;
+                const spiritName = score.spirit === 'Custom Spirit' ? playerDisplayName : `${playerDisplayName} (${score.spirit})`;
+                return `<div class="flex justify-between items-center py-3 px-4 ${index === 0 ? 'bg-green-50 rounded-lg' : ''}">
+                    <span class="font-medium text-sm">${spiritName}</span>
+                    <span class="font-semibold">${score.score} points</span>
+                </div>`;
+            }).join('');
+            
+            document.getElementById('finalScores').innerHTML = scoresHtml;
+        }
+
+        generatePlayers();
+        calculateScores();
+    </script>
+</body>
+</html>

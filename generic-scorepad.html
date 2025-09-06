@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generic Score Pad - Game Scoring</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="common.js"></script>
+    <script src="games-config.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-gray-100 min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="flex items-center text-gray-900 hover:text-blue-600 transition-colors">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    <span class="font-semibold text-lg">Game Scoring</span>
+                </a>
+                
+                <!-- Breadcrumb Navigation -->
+                <nav id="breadcrumb" class="flex items-center space-x-2 text-sm text-gray-600">
+                    <span id="breadcrumbContent">My Games</span>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- My Games View -->
+        <div id="gamesView" class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">My Games</h1>
+                    <div class="flex space-x-3">
+                        <button onclick="exportData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Export
+                        </button>
+                        <label for="importFile" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium cursor-pointer">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                            </svg>
+                            Import
+                        </label>
+                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(this.files[0])">
+                        <button onclick="showCreateGameForm()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Create New Game
+                        </button>
+                    </div>
+                </div>
+                <div id="gamesList" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">No games created yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create/Edit Game Form -->
+        <div id="gameFormView" class="max-w-4xl mx-auto hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 id="gameFormTitle" class="text-3xl font-bold text-gray-900">Create New Game</h1>
+                    <button onclick="showGamesView()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        Back to Games
+                    </button>
+                </div>
+                
+                <form id="gameForm" class="space-y-6">
+                    <div>
+                        <label for="gameTitle" class="block text-sm font-medium text-gray-700 mb-2">Game Title</label>
+                        <input type="text" id="gameTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="Enter game name" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Default Players</label>
+                        <div id="playersList" class="space-y-2 mb-4">
+                            <div class="flex items-center space-x-2">
+                                <input type="text" placeholder="Player 1" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                                <button type="button" onclick="removePlayer(this)" class="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addPlayer()" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Add Player
+                        </button>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit" id="saveGameBtn" class="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            Save Game
+                        </button>
+                        <button type="button" onclick="showGamesView()" class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Game Sessions View -->
+        <div id="sessionsView" class="max-w-4xl mx-auto hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 id="sessionGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                        <p class="text-gray-600">Game Sessions</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="showGamesView()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            Back to Games
+                        </button>
+                        <button onclick="startNewSession()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            New Session
+                        </button>
+                    </div>
+                </div>
+                <div id="sessionsList" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">No sessions played yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Session Setup -->
+        <div id="sessionSetupView" class="max-w-4xl mx-auto hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 id="setupGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                    <button onclick="backToSessions()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        Back to Sessions
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="sessionDate" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                        <input type="date" id="sessionDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Players for this session</label>
+                        <div id="sessionPlayersList" class="space-y-2 mb-4">
+                        </div>
+                        <button onclick="addSessionPlayer()" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Add Player
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="startSession()" class="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                            Start Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Game Session -->
+        <div id="activeSessionView" class="max-w-6xl mx-auto hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 id="activeGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                        <p id="activeSessionDate" class="text-gray-600"></p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="addRound()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                            Add Round
+                        </button>
+                        <button onclick="finishSession()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Finish Session
+                        </button>
+                        <button onclick="cancelSession()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Score Table -->
+                <div class="overflow-x-auto">
+                    <table id="scoreTable" class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-900">Player</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scoreTableBody">
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-purple-50 font-bold">
+                                <td class="border border-gray-300 px-4 py-3">Total</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="generic-scorepad.js"></script>
+</body>

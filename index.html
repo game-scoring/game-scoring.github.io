@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Scoring</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="common.js"></script>
+    <script src="games-config.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-gray-100 min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <a href="index.html" class="flex items-center text-gray-900 hover:text-blue-600 transition-colors">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span class="font-semibold text-lg">Game Scoring</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+
+        <!-- Games Grid -->
+        <div id="gamesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Mottainai -->
+            <a href="mottainai.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-red-100 to-orange-100 relative overflow-hidden">
+                        <img src="images/mottainai-card.jpg" 
+                             alt="Mottainai box art" 
+                             class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #dc2626, #ea580c)';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Mottainai</h3>
+                            <p class="text-sm text-gray-500">By Carl Chudyk</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Complex end-game scoring with works, sales coverage, and material type majorities in a Japanese temple setting.
+                        </p>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                            Score it!
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Scythe -->
+            <a href="scythe.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-gray-700 to-gray-900 relative overflow-hidden">
+                        <img src="images/scythe-card.jpg" 
+                             alt="Scythe box art" 
+                             class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #374151, #111827);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Scythe</h3>
+                            <p class="text-sm text-gray-500">By Jamey Stegmaier</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Popularity-based multipliers applied to achievements, territory control, and resource collection in alternate history Europa.
+                        </p>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                            Score it!
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Spirit Island -->
+            <a href="spirit-island.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-green-600 to-green-800 relative overflow-hidden">
+                        <img src="images/spirit-island-card.jpg" 
+                             alt="Spirit Island box art" 
+                             class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #16a34a, #15803d)';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Spirit Island</h3>
+                            <p class="text-sm text-gray-500">By R. Eric Reuss</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Optional performance scoring system that tracks results across different difficulty levels and spirit choices.
+                        </p>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                            Score it!
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Ticket to Ride -->
+            <a href="ticket-to-ride.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
+                        <img src="images/ticket-to-ride-card.jpg" 
+                             alt="Ticket to Ride box art" 
+                             class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #3b82f6, #8b5cf6)';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Ticket to Ride</h3>
+                            <p class="text-sm text-gray-500">By Alan R. Moon</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Score calculation for railway routes, destination tickets, and longest path bonuses across various map editions.
+                        </p>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                            Score it!
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Wingspan -->
+            <a href="wingspan.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-teal-100 to-blue-200 relative overflow-hidden">
+                        <img src="images/wingspan-card.jpg" 
+                             alt="Wingspan box art" 
+                             class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-300" 
+                             onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #0d9488, #0891b2)';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Wingspan</h3>
+                            <p class="text-sm text-gray-500">By Elizabeth Hargrave</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Comprehensive scoring for bird cards, bonus objectives, round goals, and habitat development strategies.
+                        </p>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                            Score it!
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Generic Score Pad -->
+            <a href="generic-scorepad.html" class="group h-full">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                    <div class="h-48 bg-gradient-to-br from-purple-100 to-pink-100 relative overflow-hidden flex items-center justify-center">
+                        <svg class="w-20 h-20 text-purple-600 opacity-80 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Generic Score Pad</h3>
+                            <p class="text-sm text-gray-500">Universal Game Tracker</p>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm flex-1">
+                            Create custom score pads for any game. Add players, track scores across rounds, and save your game history.
+                        </p>
+                        <div class="bg-purple-50 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-purple-100 transition-colors">
+                            Start Scoring!
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center">
+            <a href="https://github.com/game-scoring/game-scoring.github.io" 
+               class="inline-flex items-center text-gray-500 hover:text-gray-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+                </svg>
+                View on GitHub
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Generate games grid dynamically
+        function generateGamesGrid() {
+            const gamesGrid = document.getElementById('gamesGrid');
+            if (!gamesGrid || !window.gamesConfig) return;
+
+            const allGames = window.gamesConfig.getAllGames();
+            
+            // Generate cards for all games
+            const gamesHTML = allGames.map(game => `
+                <a href="${game.file}" class="group h-full">
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                        <div class="h-48 bg-gradient-to-br from-${game.gradientFrom} to-${game.gradientTo} relative overflow-hidden">
+                            <img src="${game.cardImage}" 
+                                 alt="${game.title} box art" 
+                                 class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300" 
+                                 onerror="this.style.display='none'; this.parentElement.style.background='${game.fallbackGradient}';">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-semibold text-gray-900">${game.title}</h3>
+                                <p class="text-sm text-gray-500">By ${game.designer}</p>
+                            </div>
+                            <p class="text-gray-600 mb-4 text-sm flex-1">
+                                ${game.description}
+                            </p>
+                            <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-blue-100 transition-colors">
+                                Score it!
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+
+            // Add Generic Score Pad
+            const genericScorePadHTML = `
+                <a href="generic-scorepad.html" class="group h-full">
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border border-gray-200 overflow-hidden h-full flex flex-col">
+                        <div class="h-48 bg-gradient-to-br from-purple-100 to-pink-100 relative overflow-hidden flex items-center justify-center">
+                            <svg class="w-20 h-20 text-purple-600 opacity-80 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-semibold text-gray-900">Generic Score Pad</h3>
+                                <p class="text-sm text-gray-500">Universal Game Tracker</p>
+                            </div>
+                            <p class="text-gray-600 mb-4 text-sm flex-1">
+                                Create custom score pads for any game. Add players, track scores across rounds, and save your game history.
+                            </p>
+                            <div class="bg-purple-50 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium text-center group-hover:bg-purple-100 transition-colors">
+                                Start Scoring!
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+
+            gamesGrid.innerHTML = gamesHTML + genericScorePadHTML;
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', generateGamesGrid);
+    </script>
+</body>
+</html>
