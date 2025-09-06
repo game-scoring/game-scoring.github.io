@@ -1,5 +1,55 @@
 /* Mobile optimizations and responsive design */
 
+/* General mobile improvements */
+@media (max-width: 768px) {
+    /* Game-specific adjustments */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Better grid layouts on mobile */
+    .grid-cols-2 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    .lg\:grid-cols-2 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    /* Improved spacing for game forms */
+    .game-form-spacing {
+        gap: 1rem;
+    }
+    
+    /* Headers and text scaling */
+    .text-4xl {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+    
+    /* Better spacing for game cards */
+    .rounded-xl {
+        margin-bottom: 1rem;
+    }
+    
+    /* Improved form layouts */
+    .grid-cols-1 {
+        gap: 1rem;
+    }
+    
+    /* Background image fixes for mobile */
+    body {
+        background-attachment: scroll !important;
+        background-size: cover !important;
+    }
+    
+    /* Player cards on mobile should stack nicely */
+    .lg\:grid-cols-2 > div {
+        margin-bottom: 1.5rem;
+    }
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
     /* Ensure proper scrolling on mobile */
