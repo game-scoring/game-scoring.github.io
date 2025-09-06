@@ -11,6 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="common.js"></script>
     <script src="games-config.js"></script>
+    <link rel="stylesheet" href="mobile.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -36,13 +37,14 @@
         </div>
     </header>
 
-    <div class="container mx-auto px-6 py-8">
+    <div class="main-container">
+        <div class="container mx-auto px-6 py-8">
         <!-- My Games View -->
         <div id="gamesView" class="max-w-4xl mx-auto">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-3xl font-bold text-gray-900">My Games</h1>
-                    <div class="flex space-x-3">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">My Games</h1>
+                    <div class="button-row flex flex-wrap gap-3 sm:space-x-3 sm:space-y-0">
                         <button onclick="exportData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -73,8 +75,8 @@
         <!-- Create/Edit Game Form -->
         <div id="gameFormView" class="max-w-4xl mx-auto hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 id="gameFormTitle" class="text-3xl font-bold text-gray-900">Create New Game</h1>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
+                    <h1 id="gameFormTitle" class="text-2xl sm:text-3xl font-bold text-gray-900">Create New Game</h1>
                     <button onclick="showGamesView()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                         Back to Games
                     </button>
@@ -106,7 +108,7 @@
                         </button>
                     </div>
 
-                    <div class="flex space-x-4">
+                    <div class="button-row flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                         <button type="submit" id="saveGameBtn" class="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
                             Save Game
                         </button>
@@ -121,12 +123,12 @@
         <!-- Game Sessions View -->
         <div id="sessionsView" class="max-w-4xl mx-auto hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
                     <div>
-                        <h1 id="sessionGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                        <h1 id="sessionGameTitle" class="text-2xl sm:text-3xl font-bold text-gray-900"></h1>
                         <p class="text-gray-600">Game Sessions</p>
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="button-row flex flex-wrap gap-3 sm:space-x-3 sm:space-y-0">
                         <button onclick="showGamesView()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                             Back to Games
                         </button>
@@ -144,8 +146,8 @@
         <!-- Game Session Setup -->
         <div id="sessionSetupView" class="max-w-4xl mx-auto hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 id="setupGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
+                    <h1 id="setupGameTitle" class="text-2xl sm:text-3xl font-bold text-gray-900"></h1>
                     <button onclick="backToSessions()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                         Back to Sessions
                     </button>
@@ -181,12 +183,12 @@
         <!-- Active Game Session -->
         <div id="activeSessionView" class="max-w-6xl mx-auto hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
                     <div>
-                        <h1 id="activeGameTitle" class="text-3xl font-bold text-gray-900"></h1>
+                        <h1 id="activeGameTitle" class="text-2xl sm:text-3xl font-bold text-gray-900"></h1>
                         <p id="activeSessionDate" class="text-gray-600"></p>
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="button-row flex flex-wrap gap-3 sm:space-x-3 sm:space-y-0">
                         <button onclick="addRound()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                             Add Round
                         </button>
@@ -200,8 +202,8 @@
                 </div>
 
                 <!-- Score Table -->
-                <div class="overflow-x-auto">
-                    <table id="scoreTable" class="w-full border-collapse border border-gray-300">
+                <div class="score-table-container overflow-x-auto">
+                    <table id="scoreTable" class="score-table w-full border-collapse border border-gray-300">
                         <thead>
                             <tr class="bg-gray-50">
                                 <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-900">Player</th>
@@ -218,6 +220,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="generic-scorepad.js"></script>

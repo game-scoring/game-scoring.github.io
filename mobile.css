@@ -1,0 +1,76 @@
+/* Mobile optimizations and responsive design */
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    /* Ensure proper scrolling on mobile */
+    html, body {
+        overflow-x: hidden;
+        height: 100%;
+    }
+    
+    /* Make main container scrollable */
+    .main-container {
+        height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2rem;
+    }
+    
+    /* Improve touch targets */
+    button, input, select {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Better table handling on mobile */
+    .score-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0.5rem;
+        border: 1px solid #d1d5db;
+    }
+    
+    /* Adjust table cells for mobile */
+    .score-table th,
+    .score-table td {
+        min-width: 80px;
+        padding: 0.75rem 0.5rem;
+    }
+    
+    /* Smaller padding on mobile */
+    .mobile-padding {
+        padding: 1rem;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    @media (max-width: 480px) {
+        .button-row {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .button-row button {
+            width: 100%;
+        }
+    }
+}
+
+/* Touch-friendly scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
