@@ -9,8 +9,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="common.js"></script>
-    <script src="game-utils.js"></script>
+    <!-- <script src="common.js"></script>
+    <script src="game-utils.js"></script> -->
     <link rel="stylesheet" href="mobile.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -87,7 +87,10 @@
         let playerCount = 2;
         
         // Initialize game utilities
-        gameUtils = new GameUtils('Scythe', 'blue');
+        function getPlayerName(playerNum) {
+            const nameInput = document.getElementById(`p${playerNum}_name`);
+            return nameInput ? (nameInput.value.trim() || `Player ${playerNum}`) : `Player ${playerNum}`;
+        }
 
         function updatePlayerCount() {
             playerCount = parseInt(document.getElementById('playerCount').value);
@@ -100,10 +103,19 @@
             container.innerHTML = '';
 
             for (let i = 1; i <= playerCount; i++) {
+                console.log('Creating scythe player card', i);
                 const playerCard = document.createElement('div');
                 playerCard.className = 'bg-white rounded-xl shadow-lg p-6';
                 playerCard.innerHTML = `
-                    ${gameUtils.createPlayerNameInput(i, 'blue')}
+                    <div class="flex items-center mb-6 pb-4 border-b border-gray-200">
+                        <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm mr-3">
+                            ${i}
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Player ${i} Name:</label>
+                            <input type="text" id="p${i}_name" placeholder="Player ${i}" value="Player ${i}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
 
                     <!-- Popularity -->
                     <div class="mb-6 p-4 bg-yellow-50 rounded-lg">
@@ -216,6 +228,7 @@
         }
 
         function calculateScores() {
+            console.log('calculateScores called');
             const scores = [];
 
             for (let i = 1; i <= playerCount; i++) {
@@ -242,7 +255,7 @@
                 
                 scores.push({
                     player: i,
-                    playerName: gameUtils.getPlayerName(i),
+                    playerName: getPlayerName(i),
                     total: totalScore,
                     popularity: popularity,
                     starScore: starScore,
@@ -264,14 +277,26 @@
             const sortedScores = [...scores].sort((a, b) => b.total - a.total);
             
             // Display winner
-            const winnerText = gameUtils.createWinnerText(sortedScores, '⚙️');
+            const winner = sortedScores[0];
+            const tiedPlayers = sortedScores.filter(p => p.total === winner.total);
+            const winnerText = tiedPlayers.length > 1 ? 
+                `🤝 Tie between ${tiedPlayers.map(p => p.playerName).join(' and ')}!` : 
+                `⚙️ ${winner.playerName} Wins!`;
             document.getElementById('winner').textContent = winnerText;
             
             // Custom score formatter for Scythe (includes popularity)
             const formatScore = (score) => `$${score.total} (Pop: ${score.popularity})`;
             
             // Display scores
-            const scoresHtml = gameUtils.createScoresHTML(sortedScores, 'yellow', formatScore);
+            const scoresHtml = sortedScores.map((score, index) => {
+                const scoreText = formatScore(score);
+                return `
+                    <div class="flex justify-between items-center py-3 px-4 ${index === 0 ? 'bg-yellow-50 rounded-lg' : ''}">
+                        <span class="font-medium">${index + 1}. ${score.playerName}</span>
+                        <span class="font-semibold">${scoreText}</span>
+                    </div>
+                `;
+            }).join('');
             document.getElementById('finalScores').innerHTML = scoresHtml;
             
             // Add save session button
@@ -288,7 +313,45 @@
                 }))
             };
             
-            gameUtils.addSaveSessionButton('finalScores', scores, gameSpecificData);
+            // Add Save Game Session button to finalScores
+            const finalScoresContainer = document.getElementById('finalScores');
+            if (!finalScoresContainer.querySelector('.save-session-btn')) {
+                const saveButton = document.createElement('button');
+                saveButton.className = 'save-session-btn w-full mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium';
+                saveButton.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    Save Game Session
+                `;
+                
+                saveButton.onclick = () => {
+                    const sortedScores = [...scores].sort((a, b) => b.total - a.total);
+                    const session = {
+                        id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                        gameType: 'Scythe',
+                        date: new Date().toISOString().split('T')[0],
+                        timestamp: new Date().toISOString(),
+                        players: scores.map(s => s.playerName),
+                        scores: scores,
+                        winner: sortedScores[0].playerName,
+                        gameSpecificData: gameSpecificData,
+                        finished: true
+                    };
+                    
+                    try {
+                        const sessions = JSON.parse(localStorage.getItem('unifiedGameSessions') || '[]');
+                        sessions.unshift(session);
+                        localStorage.setItem('unifiedGameSessions', JSON.stringify(sessions));
+                        localStorage.setItem('unifiedGameSessions_backup', JSON.stringify(sessions));
+                        alert(`Game session saved! Winner: ${session.winner}`);
+                    } catch (e) {
+                        alert('Failed to save game session. Please try again.');
+                    }
+                };
+                
+                finalScoresContainer.appendChild(saveButton);
+            }
         }
 
         generatePlayers();
