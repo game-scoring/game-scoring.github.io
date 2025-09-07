@@ -265,6 +265,20 @@ function showSessionsView(gameId, gameTitle = null) {
     
     document.getElementById('sessionGameTitle').textContent = displayTitle;
     updateBreadcrumb(`My Games > ${displayTitle}`);
+    
+    // Update the New Session button text based on game type
+    const builtInGamesConfig = window.gamesConfig ? window.gamesConfig.getAllGames() : [];
+    const builtInGame = builtInGamesConfig.find(game => game.id === gameId);
+    const newSessionButton = document.querySelector('#sessionsView button[onclick="startNewSession()"]');
+    
+    if (newSessionButton) {
+        if (builtInGame) {
+            newSessionButton.textContent = 'Play Again';
+        } else {
+            newSessionButton.textContent = 'New Session';
+        }
+    }
+    
     loadSessionsList(gameId, displayTitle);
 }
 
@@ -607,7 +621,17 @@ function getSessionDisplayInfo(session) {
 }
 
 function startNewSession() {
-    showSessionSetup();
+    // Check if this is a built-in game that should redirect to its own page
+    const builtInGamesConfig = window.gamesConfig ? window.gamesConfig.getAllGames() : [];
+    const builtInGame = builtInGamesConfig.find(game => game.id === currentState.selectedGameId);
+    
+    if (builtInGame) {
+        // Redirect to the built-in game's page
+        window.location.href = builtInGame.file;
+    } else {
+        // This is a custom game, show the generic session setup
+        showSessionSetup();
+    }
 }
 
 function backToSessions() {
