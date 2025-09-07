@@ -577,20 +577,22 @@ function getSessionDisplayInfo(session) {
     }
     
     // Handle specific game sessions (from built-in games)
-    if (session.scores && session.gameSpecificData) {
-        const topScore = Math.max(...session.scores.map(s => s.total || s.score));
+    if (session.scores) {
+        const topScore = Math.max(...session.scores.map(s => s.total));
         let gameSpecific = '';
         
-        if (session.gameType === 'Mottainai' && session.gameSpecificData.playerBreakdowns) {
-            gameSpecific = 'Mottainai scoring: Works, Sales, Majorities';
-        } else if (session.gameType === 'Scythe' && session.gameSpecificData.playerBreakdowns) {
-            gameSpecific = 'Scythe scoring: Stars, Territories, Resources, Popularity';
+        if (session.gameSpecificData) {
+            if (session.gameType === 'Mottainai' && session.gameSpecificData.playerBreakdowns) {
+                gameSpecific = 'Mottainai scoring: Works, Sales, Majorities';
+            } else if (session.gameType === 'Scythe' && session.gameSpecificData.playerBreakdowns) {
+                gameSpecific = 'Scythe scoring: Stars, Territories, Resources, Popularity';
+            }
         }
         
         return {
-            description: `${session.gameType} game session`,
+            description: `${session.gameType || 'Game'} session`,
             winnerScore: `(${topScore} points)`,
-            playersText: session.scores.map(s => `${s.playerName}: ${s.total || s.score}`).join(', '),
+            playersText: session.scores.map(s => `${s.playerName}: ${s.total}`).join(', '),
             gameSpecific: gameSpecific
         };
     }

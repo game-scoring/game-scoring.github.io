@@ -268,7 +268,7 @@
                 player: i,
                 playerName: getPlayerName(i),
                 spirit: spirit,
-                score: playerScore,
+                total: playerScore,
                 presence: presence,
                 dahan: dahan,
                 fear: fear,
@@ -348,11 +348,11 @@
                         player: i,
                         playerName: getPlayerName(i),
                         spirit: spirit,
-                        score: playerScore
+                        total: playerScore
                     });
                 }
                 
-                const sortedScores = [...freshScores].sort((a, b) => b.score - a.score);
+                const sortedScores = [...freshScores].sort((a, b) => b.total - a.total);
                 const session = {
                     id: Date.now().toString(36) + Math.random().toString(36).substr(2),
                     gameType: 'Spirit Island',
@@ -374,7 +374,7 @@
                     sessions.unshift(session);
                     localStorage.setItem('unifiedGameSessions', JSON.stringify(sessions));
                     localStorage.setItem('unifiedGameSessions_backup', JSON.stringify(sessions));
-                    alert(`Game session saved! Winner: ${session.winner} (${sortedScores[0].score} points)`);
+                    alert(`Game session saved! Winner: ${session.winner} (${sortedScores[0].total} points)`);
                 } catch (e) {
                     alert('Failed to save game session. Please try again.');
                 }
@@ -385,7 +385,7 @@
     }
 
     function displayResults(scores, totalScore, gameResult) {
-        const sortedScores = [...scores].sort((a, b) => b.score - a.score);
+        const sortedScores = [...scores].sort((a, b) => b.total - a.total);
 
         let outcomeText = '';
         let outcomeClass = '';
@@ -405,7 +405,7 @@
             const spiritName = score.spirit === 'Custom Spirit' ? playerDisplayName : `${playerDisplayName} (${score.spirit})`;
             return `<div class="flex justify-between items-center py-3 px-4 ${index === 0 ? 'bg-green-50 rounded-lg' : ''}">
                     <span class="font-medium text-sm">${spiritName}</span>
-                    <span class="font-semibold">${score.score} points</span>
+                    <span class="font-semibold">${score.total} points</span>
                 </div>`;
         }).join('');
 
