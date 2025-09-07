@@ -81,6 +81,7 @@
 
     <script>
         let playerCount = 2;
+        let currentScores = [];
         
         function getPlayerName(playerNum) {
             const nameInput = document.getElementById(`p${playerNum}_name`);
@@ -233,6 +234,7 @@
                     `Routes: ${routeScore} | Destinations: ${destinationScore >= 0 ? '+' : ''}${destinationScore} | Longest: ${longestBonus}`;
             }
 
+            currentScores = scores; // Store scores globally
             displayResults(scores);
             
             // Add Save Game Session button to finalScores
@@ -248,14 +250,16 @@
                 `;
                 
                 saveButton.onclick = () => {
-                    const sortedScores = [...scores].sort((a, b) => b.total - a.total);
+                    console.log('TTR currentScores when saving:', currentScores);
+                    const sortedScores = [...currentScores].sort((a, b) => b.total - a.total);
+                    console.log('TTR sortedScores[0]:', sortedScores[0]);
                     const session = {
                         id: Date.now().toString(36) + Math.random().toString(36).substr(2),
                         gameType: 'Ticket to Ride',
                         date: new Date().toISOString().split('T')[0],
                         timestamp: new Date().toISOString(),
-                        players: scores.map(s => s.playerName),
-                        scores: scores,
+                        players: currentScores.map(s => s.playerName),
+                        scores: currentScores,
                         winner: sortedScores[0].playerName,
                         finished: true
                     };

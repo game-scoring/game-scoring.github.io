@@ -314,16 +314,52 @@
             `;
             
             saveButton.onclick = () => {
-                console.log('currentScores:', currentScores);
-                const sortedScores = [...currentScores].sort((a, b) => b.score - a.score);
-                console.log('sortedScores[0]:', sortedScores[0]);
+                // Recalculate scores when saving to ensure fresh data
+                const freshScores = [];
+                const gameResult = document.getElementById('gameResult').value;
+                const difficulty = parseInt(document.getElementById('difficulty').value) || 0;
+                
+                for (let i = 1; i <= playerCount; i++) {
+                    const spirit = document.getElementById(`p${i}_spirit`).value;
+                    const presence = parseInt(document.getElementById(`p${i}_presence`).value) || 0;
+                    const dahan = parseInt(document.getElementById(`p${i}_dahan`).value) || 0;
+                    const fear = parseInt(document.getElementById(`p${i}_fear`).value) || 0;
+                    const blight = parseInt(document.getElementById(`p${i}_blight`).value) || 0;
+                    const thematicBonus = document.getElementById(`p${i}_thematic`).checked ? 5 : 0;
+
+                    let playerScore = 0;
+                    
+                    if (gameResult === 'victory') {
+                        playerScore += difficulty * 25;
+                        playerScore += presence * 2;
+                        playerScore += dahan * 3;
+                        playerScore += Math.floor(fear / 4) * 5;
+                        playerScore -= blight * 5;
+                        playerScore += thematicBonus;
+                    } else {
+                        playerScore += Math.floor(difficulty * 10);
+                        playerScore += presence;
+                        playerScore += dahan;
+                        playerScore -= blight * 2;
+                        playerScore += thematicBonus;
+                    }
+
+                    freshScores.push({
+                        player: i,
+                        playerName: getPlayerName(i),
+                        spirit: spirit,
+                        score: playerScore
+                    });
+                }
+                
+                const sortedScores = [...freshScores].sort((a, b) => b.score - a.score);
                 const session = {
                     id: Date.now().toString(36) + Math.random().toString(36).substr(2),
                     gameType: 'Spirit Island',
                     date: new Date().toISOString().split('T')[0],
                     timestamp: new Date().toISOString(),
-                    players: currentScores.map(s => s.playerName),
-                    scores: currentScores,
+                    players: freshScores.map(s => s.playerName),
+                    scores: freshScores,
                     winner: sortedScores[0].playerName,
                     gameSpecificData: {
                         gameResult: gameResult,

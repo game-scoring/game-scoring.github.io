@@ -578,7 +578,7 @@ function getSessionDisplayInfo(session) {
     
     // Handle specific game sessions (from built-in games)
     if (session.scores && session.gameSpecificData) {
-        const topScore = Math.max(...session.scores.map(s => s.total));
+        const topScore = Math.max(...session.scores.map(s => s.total || s.score));
         let gameSpecific = '';
         
         if (session.gameType === 'Mottainai' && session.gameSpecificData.playerBreakdowns) {
@@ -590,7 +590,7 @@ function getSessionDisplayInfo(session) {
         return {
             description: `${session.gameType} game session`,
             winnerScore: `(${topScore} points)`,
-            playersText: session.scores.map(s => `${s.playerName}: ${s.total}`).join(', '),
+            playersText: session.scores.map(s => `${s.playerName}: ${s.total || s.score}`).join(', '),
             gameSpecific: gameSpecific
         };
     }
