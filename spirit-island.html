@@ -9,19 +9,13 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="common-styles.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
             background-image:
-                    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
-                    url('images/spirit-island-bg.jpg');
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+                url('images/spirit-island-bg.jpg');
         }
     </style>
 </head>
@@ -94,20 +88,10 @@
     </div>
 </div>
 
+<script src="common-game-utils.js"></script>
 <script>
-    let playerCount = 1;
-    let currentScores = [];
-
-    function getPlayerName(playerNum) {
-        const nameInput = document.getElementById(`p${playerNum}_name`);
-        return nameInput ? (nameInput.value.trim() || `Player ${playerNum}`) : `Player ${playerNum}`;
-    }
-
-    function updatePlayerCount() {
-        playerCount = parseInt(document.getElementById('playerCount').value);
-        generatePlayers();
-        calculateScores();
-    }
+    // Spirit Island specific initialization
+    playerCount = 1;
 
     function generatePlayers() {
         const container = document.getElementById('playersContainer');
@@ -115,17 +99,9 @@
 
         for (let i = 1; i <= playerCount; i++) {
             const playerCard = document.createElement('div');
-            playerCard.className = 'bg-white rounded-xl shadow-lg p-6';
+            playerCard.className = 'player-card';
             playerCard.innerHTML = `
-                    <div class="flex items-center mb-6 pb-4 border-b border-gray-200">
-                        <div class="bg-green-100 text-green-800 rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm mr-3">
-                            ${i}
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Player ${i} Name:</label>
-                            <input type="text" id="p${i}_name" placeholder="Player ${i}" value="Player ${i}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        </div>
-                    </div>
+                    ${createPlayerNameInput(i, 'green')}
 
                     <!-- Spirit Selection -->
                     <div class="mb-6">
@@ -299,21 +275,10 @@
         }
 
         currentScores = scores; // Store scores globally
-        displayResults(scores, totalScore, gameResult);
+        displaySpiritIslandResults(scores, totalScore, gameResult);
 
-        // Add Save Game Session button to finalScores
-        const finalScoresContainer = document.getElementById('finalScores');
-        if (!finalScoresContainer.querySelector('.save-session-btn')) {
-            const saveButton = document.createElement('button');
-            saveButton.className = 'save-session-btn w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium';
-            saveButton.innerHTML = `
-                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
-                Save Game Session
-            `;
-            
-            saveButton.onclick = () => {
+        // Create save button with custom save logic
+        createSaveButton('Spirit Island', 'green', () => {
                 // Recalculate scores when saving to ensure fresh data
                 const freshScores = [];
                 const gameResult = document.getElementById('gameResult').value;
@@ -378,15 +343,11 @@
                 } catch (e) {
                     alert('Failed to save game session. Please try again.');
                 }
-            };
-            
-            finalScoresContainer.appendChild(saveButton);
-        }
+            });
     }
 
-    function displayResults(scores, totalScore, gameResult) {
-        const sortedScores = [...scores].sort((a, b) => b.total - a.total);
-
+    function displaySpiritIslandResults(scores, totalScore, gameResult) {
+        // Display game outcome (victory/defeat with total score)
         let outcomeText = '';
         let outcomeClass = '';
 
@@ -400,20 +361,22 @@
 
         document.getElementById('gameOutcome').innerHTML = `<span class="${outcomeClass}">${outcomeText}</span>`;
 
+        // Use common function for scores display with Spirit names
+        const sortedScores = [...scores].sort((a, b) => b.total - a.total);
         const scoresHtml = sortedScores.map((score, index) => {
             const playerDisplayName = score.playerName || `Player ${score.player}`;
             const spiritName = score.spirit === 'Custom Spirit' ? playerDisplayName : `${playerDisplayName} (${score.spirit})`;
-            return `<div class="flex justify-between items-center py-3 px-4 ${index === 0 ? 'bg-green-50 rounded-lg' : ''}">
-                    <span class="font-medium text-sm">${spiritName}</span>
-                    <span class="font-semibold">${score.total} points</span>
+            return `<div class="score-item flex justify-between items-center py-3 px-4 ${index === 0 ? 'winner bg-green-50 rounded-lg' : ''}">
+                    <span class="player-name font-medium text-sm">${spiritName}</span>
+                    <span class="points font-semibold">${score.total} points</span>
                 </div>`;
         }).join('');
-
+        
         document.getElementById('finalScores').innerHTML = scoresHtml;
     }
 
-    generatePlayers();
-    calculateScores();
+    // Initialize the game
+    initializeGame(1);
 </script>
 </body>
 </html>

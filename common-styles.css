@@ -1,0 +1,309 @@
+/* Game Scoring - Common Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Base styles */
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+/* Header styles */
+header {
+    background: white;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    border-bottom: 1px solid rgb(229 231 235);
+}
+
+header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+}
+
+header a {
+    display: flex;
+    align-items: center;
+    color: rgb(17 24 39);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+header a:hover {
+    color: rgb(37 99 235);
+}
+
+header .logo-text {
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-left: 0.5rem;
+}
+
+/* Navigation styles */
+.nav-back {
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    margin-bottom: 2rem;
+}
+
+.nav-back:hover {
+    color: rgb(209 213 219);
+}
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+/* Card styles */
+.game-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.player-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+}
+
+/* Player header styles */
+.player-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(229 231 235);
+}
+
+.player-number {
+    border-radius: 9999px;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-right: 0.75rem;
+}
+
+.player-name-container {
+    flex: 1;
+}
+
+.player-name-container label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(55 65 81);
+    margin-bottom: 0.25rem;
+}
+
+.player-name-container input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.5rem;
+    transition: all 0.15s ease;
+}
+
+.player-name-container input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(167 139 250);
+    border-color: rgb(167 139 250);
+}
+
+/* Form styles */
+.form-section {
+    margin-bottom: 1.5rem;
+}
+
+.form-section h3 {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(55 65 81);
+    margin-bottom: 0.75rem;
+}
+
+.form-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.form-grid.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-field {
+    text-align: center;
+}
+
+.form-field label {
+    display: block;
+    font-size: 0.75rem;
+    color: rgb(75 85 99);
+    margin-bottom: 0.25rem;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.5rem;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.form-field input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(59 130 246);
+    border-color: rgb(59 130 246);
+}
+
+/* Score display styles */
+.score-display {
+    background: rgb(249 250 251);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.score-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.score-breakdown {
+    font-size: 0.875rem;
+    color: rgb(75 85 99);
+}
+
+/* Results styles */
+.results-section {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+}
+
+.results-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgb(17 24 39);
+    margin-bottom: 1rem;
+}
+
+.winner-display {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 1rem 0;
+    color: rgb(55 65 81);
+}
+
+.scores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.score-item.winner {
+    border-radius: 0.5rem;
+}
+
+.score-item .player-name {
+    font-weight: 500;
+}
+
+.score-item .points {
+    font-weight: 600;
+}
+
+/* Button styles */
+.save-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Special sections */
+.bonus-section {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.bonus-section label {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.bonus-section input[type="checkbox"] {
+    margin-right: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.bonus-section p {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    margin-left: 1.5rem;
+}
+
+/* Responsive grid */
+@media (min-width: 1024px) {
+    .players-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* Game-specific background overlays */
+.game-bg {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.game-overlay {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
+}
