@@ -97,6 +97,7 @@
 
 <script>
     let playerCount = 1;
+    let currentScores = [];
 
     function getPlayerName(playerNum) {
         const nameInput = document.getElementById(`p${playerNum}_name`);
@@ -298,6 +299,7 @@
             document.getElementById(`p${i}_breakdown`).textContent = breakdown.join(' | ');
         }
 
+        currentScores = scores; // Store scores globally
         displayResults(scores, totalScore, gameResult);
 
         // Add Save Game Session button to finalScores
@@ -313,14 +315,16 @@
             `;
             
             saveButton.onclick = () => {
-                const sortedScores = [...scores].sort((a, b) => b.score - a.score);
+                console.log('currentScores:', currentScores);
+                const sortedScores = [...currentScores].sort((a, b) => b.score - a.score);
+                console.log('sortedScores[0]:', sortedScores[0]);
                 const session = {
                     id: Date.now().toString(36) + Math.random().toString(36).substr(2),
                     gameType: 'Spirit Island',
                     date: new Date().toISOString().split('T')[0],
                     timestamp: new Date().toISOString(),
-                    players: scores.map(s => s.playerName),
-                    scores: scores,
+                    players: currentScores.map(s => s.playerName),
+                    scores: currentScores,
                     winner: sortedScores[0].playerName,
                     gameSpecificData: {
                         gameResult: gameResult,
@@ -335,7 +339,7 @@
                     sessions.unshift(session);
                     localStorage.setItem('unifiedGameSessions', JSON.stringify(sessions));
                     localStorage.setItem('unifiedGameSessions_backup', JSON.stringify(sessions));
-                    alert(`Game session saved! Winner: ${session.winner}`);
+                    alert(`Game session saved! Winner: ${session.winner} (${sortedScores[0].score} points)`);
                 } catch (e) {
                     alert('Failed to save game session. Please try again.');
                 }
