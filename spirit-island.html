@@ -300,17 +300,48 @@
 
         displayResults(scores, totalScore, gameResult);
 
-        // Add Save Game Session button if it doesn't exist
-        if (!document.getElementById('saveGameSessionContainer')) {
-            const resultsContainer = document.querySelector('.bg-white.rounded-xl.shadow-lg.p-6');
-            const saveContainer = document.createElement('div');
-            saveContainer.id = 'saveGameSessionContainer';
-            saveContainer.innerHTML = gameUtils.addSaveSessionButton('saveGameSessionContainer', scores, {
-                gameResult: gameResult,
-                difficulty: parseInt(document.getElementById('difficulty').value) || 0,
-                totalScore: totalScore
-            });
-            resultsContainer.appendChild(saveContainer);
+        // Add Save Game Session button to finalScores
+        const finalScoresContainer = document.getElementById('finalScores');
+        if (!finalScoresContainer.querySelector('.save-session-btn')) {
+            const saveButton = document.createElement('button');
+            saveButton.className = 'save-session-btn w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium';
+            saveButton.innerHTML = `
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+                Save Game Session
+            `;
+            
+            saveButton.onclick = () => {
+                const sortedScores = [...scores].sort((a, b) => b.score - a.score);
+                const session = {
+                    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                    gameType: 'Spirit Island',
+                    date: new Date().toISOString().split('T')[0],
+                    timestamp: new Date().toISOString(),
+                    players: scores.map(s => s.playerName),
+                    scores: scores,
+                    winner: sortedScores[0].playerName,
+                    gameSpecificData: {
+                        gameResult: gameResult,
+                        difficulty: difficulty,
+                        totalScore: totalScore
+                    },
+                    finished: true
+                };
+                
+                try {
+                    const sessions = JSON.parse(localStorage.getItem('unifiedGameSessions') || '[]');
+                    sessions.unshift(session);
+                    localStorage.setItem('unifiedGameSessions', JSON.stringify(sessions));
+                    localStorage.setItem('unifiedGameSessions_backup', JSON.stringify(sessions));
+                    alert(`Game session saved! Winner: ${session.winner}`);
+                } catch (e) {
+                    alert('Failed to save game session. Please try again.');
+                }
+            };
+            
+            finalScoresContainer.appendChild(saveButton);
         }
     }
 
